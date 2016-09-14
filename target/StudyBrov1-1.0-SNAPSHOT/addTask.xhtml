@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:em="http://xmlns.jcp.org/jsf/composite/emcomp"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      >
+    <body>
+        <ui:composition template="template.xhtml">
+            <ui:define name="mainContent">
+                <h:form id="mainForm">
+                    <p:panelGrid id="taskAddPanel" >
+                        <f:facet name="header" >
+                            <p:row>
+                                <p:column colspan="5">ADD TASK</p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:messages id="errorMessages" autoUpdate="true" showDetail="true" for="mainForm"/>
+                        <p:row>
+                            <p:column colspan="5">
+                                <em:ButtonAndDropdownSelector id="taskSelector" outputValue="#{facesContext.externalContext.sessionMap[bundle.selectedTaskType]}" values="#{addTaskBean.taskTypes}" listener="#{addTaskBean.dummyListener}" label="Task type:" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <em:ButtonAndDropdownSelector id="lifeAreaSelctor" outputValue="#{facesContext.externalContext.sessionMap[bundle.selectedLifeArea]}" values="#{addTaskBean.lifeAreas}" listener="#{addTaskBean.lifeAreaSelected(null)}" updateId="mainForm:lifeAreaCategorySelector" label="Life Area:"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="5">
+                                <em:ButtonAndDropdownSelector id="lifeAreaCategorySelector" outputValue="#{facesContext.externalContext.sessionMap[bundle.selectedLifeAreaCategory]}" values="#{addTaskBean.lifeAreaCategories}" listener="#{addTaskBean.dummyListener}" label="Life Area Category" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="taskName" value="Task name:" />
+                                <p:inputText id="taskName" value="#{addTaskBean.taskName}" required="true" requiredMessage="Please enter task name" >
+                                    <f:validator validatorId="taskValidator" />
+                                </p:inputText>
+                            </p:column>
+                            <p:column>
+                                <h:message for="taskName"  />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:outputLabel for="taskDescription" value="Task description: " />
+                                <!--<p:editor id="taskDescription" widgetVar="editorWidget" value="#{addTaskBean.taskDescription}" maxlength="240" />-->
+                                <p:inputTextarea id="taskDescription" value="#{addTaskBean.taskDescription}" maxlength="240" cols="100" rows="3" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:outputLabel for="dueDate" value="Due date:" />
+                                <p:calendar id="dueDate" value="#{addTaskBean.dueDate}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="hourEstimation" value="Estimated hours: " />
+                                <p:inputText id="hourEstimation" value="#{addTaskBean.estimatedHours}" />
+                                <p:slider for="hourEstimation" minValue="0" maxValue="20" />
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="minutesEstimation" value="Estimated minutes: " />
+                                <p:inputText id="minutesEstimation" value="#{addTaskBean.estimatedMinutes}" />
+                                <p:slider for="minutesEstimation" minValue="0" maxValue="60" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="importance" value="Importance: " />
+                                <p:inputText id="importance" value="#{addTaskBean.importance}" />
+                                <p:slider for="importance" minValue="0" maxValue="10" />
+                            </p:column>
+                            <p:column >
+                                <p:outputLabel for="joy" value="joy: " />
+                                <p:inputText id="joy" value="#{addTaskBean.joy}"  >
+                                    <f:validateDoubleRange  minimum="0" maximum="10" for="joy" />
+                                    <h:message for="joy" />
+                                </p:inputText>
+                                <p:slider for="joy" minValue="0" maxValue="10" >
+                                </p:slider>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton id="submitTask" value="Create Task" >
+                                    <p:ajax listener="#{addTaskBean.createTask(null, null, null)}" update="taskAddPanel newCategoryForm:resultText" process="taskAddPanel" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                            </p:column>
+                        </p:row>
+
+                        <f:facet name="footer" >
+                            <p:row>
+                                <p:column>ADD NEW CATEGORY</p:column>
+                            </p:row>
+                        </f:facet>
+                    </p:panelGrid>
+                </h:form>
+                <h:form id="newCategoryForm">
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:messages id="messagesNewCategory" showDetail="true" autoUpdate="true" for="newCategoryForm"/>
+                        <h:outputScript library="js" name="updateText.js" />
+                        <p:selectOneMenu id="newCategoryType" value="#{addTaskBean.selectedCategory}" panelStyle="width:180px"
+                                         effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith" required="true" onchange="updateText('yo')">
+                            <f:selectItem itemLabel="Create new ..." itemValue="" />
+                            <f:selectItems value="#{addTaskBean.categoryTypes}" var="type" itemLabel="#{type}" itemValue="#{type}" />
+                        </p:selectOneMenu>
+                        <p:inputText id="newCategoryTypeName" value="#{addTaskBean.newName}" onkeyup="updateText('you are editing the name')"/>
+                        <p:inputText id="newDescTypeName" value="#{addTaskBean.newDescription}" />
+                        <h:outputText id="resultText" value="#{addTaskBean.creationResult}" />
+                        <p:commandButton id="submitNewCategeoryType" value="submit" >
+                            <p:ajax listener="#{addTaskBean.newCategoryType(null)}" process="newCategoryForm" update="newCategoryForm" />
+                        </p:commandButton>
+                        <p:commandButton id="reloadPage" value="Refresh new changes" action="addTask.xhtml" ajax="false" />
+                    </h:panelGrid>
+                    <div id="jsResponse">
+                        Remember to select category type..
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

@@ -1,0 +1,8 @@
+div.taskIncompleteStyle {  
+    background: #F03030 none !important;  /* red */  
+    border-color: #bd2828 !important;     /* red */  
+}  
+div.taskCompleteStyle {  
+    background: #1AA11A none !important;  /* green */  
+    border-color: #136e13 !important;     /* green */  
+} 

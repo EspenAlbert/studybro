@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:pe="http://primefaces.org/ui/extensions" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:emcomp="http://xmlns.jcp.org/jsf/composite/emcomp"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+        <ui:composition template="template.xhtml" >
+            <ui:define name="mainContent" >
+                <h:form id="mainForm" >
+                    <h:outputStylesheet library="css" name="timeline.css" />
+                    <p:growl id="growl" showSummary="true" showDetail="true" autoUpdate="true"/> 
+                    <p:outputLabel for="workHoursThisWeek" value="Hours worked since Monday " />
+                    <h:outputText id="workHoursThisWeek" value="#{reviewWorkBean.workHoursThisWeek}" /><br></br>
+                    <p:outputLabel for="workHoursLast7Days" value="Hours worked last 7 days: " />
+                    <h:outputText id="workHoursLast7Days" value="#{reviewWorkBean.hoursLast7Days}" /><br></br>
+<!--                    <p:calendar id="startDate" value="#{reviewWorkBean.start}" />
+                    <p:calendar id="endDate" value="#{reviewWorkBean.end}" />
+                    <p:commandButton id="changeDates" actionListener="#{reviewWorkBean.datesSelected()}" value="Change dates" process="@form" update="timelineForm" />-->
+                </h:form>
+                <h:form id="timelineForm" >
+                    <pe:timeline id="timeline" value="#{reviewWorkBean.model}" var="workSession" varGroup="task"
+                                 selectable="true" 
+                                 zoomable="true" 
+                                 moveable="true" 
+                                 stackEvents="true" 
+                                 eventStyle="box" 
+                                 showCurrentTime="true" 
+                                 showNavigation="false"
+                                 groupsChangeable   ="true"
+                                 groupsOnRight="false" > 
+                        <p:ajax event="select" listener="#{reviewWorkBean.onSelect}" update="formForDialog" process="@form"/>  
+                        <f:facet name="group">  
+                            <p:commandLink value="Task: #{task.name}" action="#{objectEditor.createEditComponentPageIdInParams('taskEditor.xhtml')}" process="@form" update="formForDialog"> 
+                                <f:param name="objectId" value="#{task.idtask}" />
+                                <f:param name="objectType" value="#{task.getClass()}" />
+                            </p:commandLink>
+                        </f:facet>  
+
+                        <h:outputText value="Notes: #{workSession.notes}" />
+                    </pe:timeline>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

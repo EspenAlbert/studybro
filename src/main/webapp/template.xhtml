@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:emcomp="http://xmlns.jcp.org/jsf/composite/emcomp">
+    <h:head>
+        <title>StudyBro</title>
+        <!--<h:outputScript name="timer.js" library="js" target="body" />-->
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true" id="mainLayout">
+            <p:layoutUnit position="north" resizable="true"> 
+                <h1> Welcome to study bro! </h1>
+            </p:layoutUnit>
+            <p:layoutUnit position="west" resizable="true" size="300" minSize="100" maxSize="700" id="leftPanel" >
+                <h2> Navigation </h2>
+                <h:form id="sidePanelForm" >
+                    <p:commandButton id="navigateToDashboard" value="Dashboard" action="index.xhtml" immediate="true"/><br></br>
+                    <p:commandButton id="navigateToAddTask" value="Add Task" action="addTask.xhtml" immediate="true"/><br></br>
+                    <p:commandButton id="navigateToCheckInn" value="CheckInn" action="checkInn.xhtml" immediate="true"/><br></br>
+                    <p:commandButton id="navigateToPlanning" value="Planning" action="planning.xhtml" immediate="true"/><br></br>
+                    <p:commandButton id="navigateToReviewWork" value="Review work" action="reviewWork.xhtml" immediate="true"/><br></br>
+                    <p:commandButton id="closeAllDialogs" action="#{helperBean.reloadPage}" ajax="false" value="Reload (Close all dialogs)" immediate="true"/>
+                    <!--<emcomp:activityTable id="activities" rendered="#{activityLogger.events.size() > 0}" />-->
+
+                    <emcomp:activityTable id="activities" />
+                </h:form>
+                <!--
+                <div id="clockdiv">
+                    <input type="text" id="intervalls" value="8" onclick="updateDisplay()" />
+                    Time on:
+                    <input type="text" id="minutesOn" value="10" onclick="updateDisplay()" />
+                    <input type="text" id="secondsOn" value="0" onclick="updateDisplay()" />
+                    Time off: (rest)
+                    <input type="text" id="minutesOff" value="1" onclick="updateDisplay()" />
+                    <input type="text" id="secondsOff" value="0" onclick="updateDisplay()" />
+                    <input type="submit" id="goBtn" value="Start" onclick="startTimer()" />
+                    <input type="submit" id="resetBtn" value="Reset" onclick="resetTimer()" />
+                    <input type="submit" id="findCookie" value="Find cookie" onclick="readIntervalCookie()" />
+                    <div>
+                        <span class="days"></span>
+                        <div class="smalltext">Days</div>
+                    </div>
+                    <div>
+                        <span class="hours"></span>
+                        <div class="smalltext">Hours</div>
+                    </div>
+                    <div>
+                        <span class="minutes"></span>
+                        <div class="smalltext">Minutes</div>
+                    </div>
+                    <div>
+                        <span class="seconds"></span>
+                        <div class="smalltext">Seconds</div>
+                    </div>
+                </div>
+                <input type="text" id="minutes" value="${myJsNumber}" onclick="setDeadline()" />
+                <ui:insert name="sidebar" > </ui:insert>
+                <-->
+            </p:layoutUnit>
+            <p:layoutUnit position="center" resizable="true">
+                <ui:insert name ="mainContent" > </ui:insert>
+                <div id="dialogFormParent" >
+                    <h:form id="formForDialog">
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
+

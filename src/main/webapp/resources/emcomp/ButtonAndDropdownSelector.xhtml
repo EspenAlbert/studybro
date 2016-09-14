@@ -1,0 +1,47 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>This will not be present in rendered output</title>
+    </h:head>
+
+    <h:body>
+        <composite:interface>
+            <composite:attribute name="values" required="true" type="java.util.List" />
+            <composite:attribute name="label" default="Type: "/>
+            <composite:attribute name="listener" method-signature="void action()" />
+            <composite:attribute name="outputValue" required="true"/>
+            <composite:attribute name="updateId" />
+            <composite:attribute name="editComponent" default="taskOrLifeAreaCategoryEditor.xhtml" />
+        </composite:interface>
+
+        <composite:implementation>
+            <span id="#{cc.attrs.clientId}" >
+                <h:form id="componentForm">
+                    <p:outputLabel for="selectButtons" value="#{cc.attrs.label}"/>
+                    <p:selectOneButton id="selectButtons" value="#{cc.attrs.outputValue}"  >
+                        <f:selectItems value="#{helperBean.getSmallerList(cc.attrs.values, 5)}" var="item" itemLabel="#{item}" itemValue="#{item}" noSelectionValue="Select one" />
+                        <p:ajax process="@this" update="editSelected selectList #{cc.attrs.updateId}"  listener="#{cc.attrs.listener}" />
+                    </p:selectOneButton>
+
+                    <p:selectOneMenu id="selectList" value="#{cc.attrs.outputValue}" panelStyle="width:180px" filter="true" filterMatchMode="startsWith" >
+                        <f:selectItem itemLabel="Select One" itemValue="" />
+                        <f:selectItems value="#{cc.attrs.values}" var="type" itemLabel="#{type}" itemValue="#{type}" />
+                        <p:ajax process="@this" update="selectButtons #{cc.attrs.updateId}" listener="#{cc.attrs.listener}" />
+                    </p:selectOneMenu>
+                    <p:commandButton id="editSelected" value="Edit" action="#{objectEditor.createEditComponentPage(null, cc.attrs.editComponent)}" process="@form" update="@all" >
+                        <f:param name="objectString" value="#{cc.attrs.outputValue}" />
+                    </p:commandButton>
+                </h:form>
+            </span>
+        </composite:implementation>
+    </h:body>
+</html>

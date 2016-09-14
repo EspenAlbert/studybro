@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:emcomp="http://xmlns.jcp.org/jsf/composite/emcomp">
+
+    <body>
+        <ui:composition template="template.xhtml" >
+            <ui:define name="mainContent" >
+                <h:form id="mainForm">
+                    <emcomp:ButtonAndDropdownSelector id="lifeAreaSelctor" label="Select life area to work on:" outputValue="#{facesContext.externalContext.sessionMap[bundle.selectedLifeArea]}" listener="#{checkInnBean.lifeAreaSelected(null)}" values="#{checkInnBean.lifeAreas}" updateId="mainForm submitTaskOptions taskComponentsForm"/>
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                </h:form>
+                <h:form id="taskComponentsForm" >
+                    <emcomp:taskComponent id="taskComponent" rendered="#{task ne null}" />
+                    <emcomp:workSessionTable id="workSessionTable" values="#{checkInnBean.workSessions}" rendered="#{checkInnBean.workSessions.size() gt 0}" />
+                </h:form>
+                <h:form id="submitTaskOptions" > 
+                    <p:outputLabel for="currentNotes" value="NOTES:" rendered="#{task ne null}"/><br> </br>
+                    <p:inputTextarea id="currentNotes" rendered="#{task ne null}" value="#{checkInnBean.notes}"  rows="6" cols="80"/> <br> </br>
+                    <p:commandButton id="stayOnTask" value="Stay on task " rendered="#{task ne null}">
+                        <p:tooltip id="toolTipStayOnTask" for="stayOnTask" value="Notes are saved if they exist" />
+                        <p:ajax process="@form" update="@all" listener="#{checkInnBean.stayOnSameTask()}"/>
+                    </p:commandButton>
+                    <p:commandButton id="nextTask" value="Give me a new task " rendered="#{task ne null}">
+                        <p:tooltip id="toolTipNextTask" for="nextTask" value="Notes are saved if they exist" />
+                        <p:ajax process="@form" update="@all" listener="#{checkInnBean.bringNextTask()}"/>
+                    </p:commandButton>
+                    <p:commandButton id="completeTask" value="Complete" rendered="#{task ne null}" >
+                        <p:ajax process="@form" update="@all" listener="#{checkInnBean.completeTask()}"/>
+                    </p:commandButton>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

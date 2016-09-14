@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+
+    Copyright (c) 2014 Oracle and/or its affiliates. All rights reserved.
+
+    You may not modify, use, reproduce, or distribute this software except in
+    compliance with  the terms of the License at:
+    http://java.net/projects/javaeetutorial/pages/BerkeleyLicense
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+    </h:head>
+    <h:body>
+        <composite:interface> 
+        </composite:interface>
+        <composite:implementation>
+            <span id="#{cc.clientId}">
+                <p:dialog id="editDialog" visible="true" widgetVar="myDialog" >
+                    <h:form id="changeObjectForm" >
+                        <h2> Edit task </h2>
+                        <p:outputLabel for="taskName"  value="Name:"/>
+                        <p:inputTextarea id="taskName" value="#{activeObject.name}" />
+                        <p:outputLabel for="taskDescription"  value="Description:"/>
+                        <p:inputTextarea id="taskDescription" value="#{activeObject.description}" />
+                        <p:outputLabel for="taskComplete"  value="Complete?"/>
+                        <p:selectBooleanCheckbox id="taskComplete" value="#{activeObject.complete}" />
+                        <p:outputLabel for="taskDueDate"  value="Due date:"/>
+                        <p:calendar id="taskDueDate" value="#{activeObject.dueDate}" />
+                        <p:commandButton id="editObject" value="EDIT" actionListener="#{objectEditor.edit}" process="@form" update="@all"/>
+                        <p:commandButton id="deleteObject" value="DELETE" actionListener="#{objectEditor.delete}" process="@form" update="formForDialog"/>
+                        <p:commandButton id="startWorking" value="Start working" action="checkInn.xhtml" process="@form" update="formForDialog"/>
+                        <p:commandButton id="closeDialog" value="Cancel" actionListener="#{objectEditor.close}" process="@form" update="formForDialog"/>
+                    </h:form>
+                </p:dialog>
+            </span>
+        </composite:implementation>
+    </h:body>
+</html>
+
